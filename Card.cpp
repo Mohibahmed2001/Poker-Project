@@ -1,79 +1,78 @@
 #include "Card.hpp"
-using namespace std;
 #include <iostream>
 
 Card::~Card() {
-    cout << "Destructor is called" << endl;
-    delete[] this->bitmap_;
+    std::cout << "Destructor is called" << std::endl;
+    delete[] bitmap_;
 }
 
 // Copy Constructor
 Card::Card(const Card& rhs) {
-    cout << "Copy constructor called" << endl;
-    this->cardType_ = rhs.cardType_;
-    this->instruction_ = rhs.instruction_;
+    std::cout << "Copy constructor called" << std::endl;
+    cardType_ = rhs.cardType_;
+    instruction_ = rhs.instruction_;
 
-    if (rhs.bitmap_) {
-        this->bitmap_ = new int[80];
-        for (int i = 0; i < 80; i++) {
-            this->bitmap_[i] = rhs.bitmap_[i];
-        }
-    } else {
-        this->bitmap_ = nullptr;
+    // Allocate memory for the bitmap and copy the data
+    bitmap_ = new int[80];
+    for (int i = 0; i < 80; i++) {
+        bitmap_[i] = rhs.bitmap_[i];
     }
 
-    this->drawn_ = rhs.drawn_;
+    drawn_ = rhs.drawn_;
 }
 
 // Copy Assignment Operator
 Card& Card::operator=(const Card& rhs) {
     if (this != &rhs) {
-        cout << "Copy assignment called" << endl;
-
-        this->cardType_ = rhs.cardType_;
-        this->instruction_ = rhs.instruction_;
+        std::cout << "Copy assignment called" << std::endl;
 
         // Release the existing bitmap
-        delete[] this->bitmap_;
+        delete[] bitmap_;
 
-        if (rhs.bitmap_) {
-            this->bitmap_ = new int[80];
-            for (int i = 0; i < 80; i++) {
-                this->bitmap_[i] = rhs.bitmap_[i];
-            }
-        } else {
-            this->bitmap_ = nullptr;
+        cardType_ = rhs.cardType_;
+        instruction_ = rhs.instruction_;
+
+        // Allocate memory for the new bitmap and copy the data
+        bitmap_ = new int[80];
+        for (int i = 0; i < 80; i++) {
+            bitmap_[i] = rhs.bitmap_[i];
         }
 
-        this->drawn_ = rhs.drawn_;
+        drawn_ = rhs.drawn_;
     }
     return *this;
 }
 
 // Move Constructor
 Card::Card(Card&& rhs) {
-    cout << "Move constructor called" << endl;
+    std::cout << "Move constructor called" << std::endl;
 
-    this->cardType_ = rhs.cardType_;
-    this->instruction_ = std::move(rhs.instruction_);
-    this->bitmap_ = rhs.bitmap_;
-    rhs.bitmap_ = nullptr; // Reset rhs
+    cardType_ = rhs.cardType_;
+    instruction_ = std::move(rhs.instruction_);
 
-    this->drawn_ = rhs.drawn_;
+    // Move the existing bitmap and reset rhs
+    bitmap_ = rhs.bitmap_;
+    rhs.bitmap_ = nullptr;
+
+    drawn_ = rhs.drawn_;
 }
 
 // Move Assignment Operator
 Card& Card::operator=(Card&& rhs) {
     if (this != &rhs) {
-        cout << "Move assignment called" << endl;
+        std::cout << "Move assignment called" << std::endl;
 
-        this->cardType_ = rhs.cardType_;
-        this->instruction_ = std::move(rhs.instruction_);
-        delete[] this->bitmap_; // Release existing bitmap
-        this->bitmap_ = rhs.bitmap_;
-        rhs.bitmap_ = nullptr; // Reset rhs
+        // Release the existing bitmap
+        delete[] bitmap_;
 
-        this->drawn_ = rhs.drawn_;
+        cardType_ = rhs.cardType_;
+        instruction_ = std::move(rhs.instruction_);
+
+        // Move the existing bitmap and reset rhs
+        bitmap_ = rhs.bitmap_;
+        rhs.bitmap_ = nullptr;
+
+        drawn_ = rhs.drawn_;
     }
     return *this;
 }
@@ -81,73 +80,42 @@ Card& Card::operator=(Card&& rhs) {
 // Default Constructor
 Card::Card() = default;
 
-// Rest of the member functions (getType, setType, setInstruction, getInstruction, getImageData, setImageData, getDrawn, setDrawn)
+// Other member functions
+std::string Card::getType() const {
+    return (cardType_ == POINT_CARD) ? "POINT_CARD" : "ACTION_CARD";
+}
 
+void Card::setType(const CardType& type) {
+    cardType_ = type;
+}
 
-        /**
-         * @return the string representation of the card type
-         */
-        string Card::getType() const
-        {
-                if(cardType_==POINT_CARD){
-                        return "POINT_CARD";
-                }else{
-                        return "ACTION_CARD";
-                }
-        }
-        /**
-         * @post: set the card type
-         * @param const reference to a CardType object
-         */
-        void Card::setType(const CardType& type){
-                cardType_= type;
-         }
+const std::string& Card::getInstruction() const {
+    return instruction_;
+}
 
-        /**
-         * @return the string representation of the card instruction
-        */
-        /**
-         * @post: set the card instruction
-         * @param: const reference to an instruction 
-         */
-        void Card::setInstruction(const std::string& instruction){
-                instruction_ = instruction;
-        }
-        /**
-         * @return the string representation of the card instruction
-        */
-       const string&Card::getInstruction() const{
-                return instruction_;
+void Card::setInstruction(const std::string& instruction) {
+    instruction_ = instruction;
+}
 
-        }
-       
-        /**
-         * @return the image data
-         */
-        const int*Card::getImageData() const{
-                return bitmap_;
+const int* Card::getImageData() const {
+    return bitmap_;
+}
 
-        }
-        /**
-         * @post: Set the image data
-         * @param pointer to an array of integers
-         */
-        void Card::setImageData(int* data){
-                bitmap_ = data;
-        }
+void Card::setImageData(int* data) {
+    // Release existing bitmap
+    delete[] bitmap_;
+    
+    // Allocate new memory for the bitmap and copy the data
+    bitmap_ = new int[80];
+    for (int i = 0; i < 80; i++) {
+        bitmap_[i] = data[i];
+    }
+}
 
-        /**
-         * @return the drawn status of the card
-        */
-       bool Card::getDrawn() const{
-        return drawn_;
+bool Card::getDrawn() const {
+    return drawn_;
+}
 
-       }
-        /**
-         * @post: set the drawn status of the card
-         * 
-         * @param: const reference to a boolean
-         */
-        void Card::setDrawn(const bool& drawn){
-                drawn_=drawn;
-        }
+void Card::setDrawn(const bool& drawn) {
+    drawn_ = drawn;
+}

@@ -104,7 +104,7 @@ class Card
     private:
         CardType cardType_;
         std::string instruction_;
-        int* bitmap_;
+        int bitmap_[80];
         bool drawn_;
 };
 
