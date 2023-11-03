@@ -2,42 +2,43 @@
 
 // Destructor
 Card::~Card() {
-    delete[] bitmap_;  // Assuming bitmap_ is dynamically allocated
+    delete[] bitmap_;
 }
 
 // Copy Constructor
-Card::Card(const Card& rhs) 
-    : cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
-    bitmap_ = new int[80];  
-    std::copy(rhs.bitmap_, rhs.bitmap_ + 80, bitmap_);  
+Card::Card(const Card& rhs) : cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
+    bitmap_ = new int[80];
+    for(int i = 0; i < 80; ++i) {
+        bitmap_[i] = rhs.bitmap_[i];
+    }
 }
 
 // Copy Assignment Operator
 Card& Card::operator=(const Card& rhs) {
     if (this != &rhs) {
-        delete[] bitmap_;  // Delete existing bitmap_
         cardType_ = rhs.cardType_;
         instruction_ = rhs.instruction_;
         drawn_ = rhs.drawn_;
+        delete[] bitmap_;
         bitmap_ = new int[80];
-        std::copy(rhs.bitmap_, rhs.bitmap_ + 80, bitmap_);
+        for(int i = 0; i < 80; ++i) {
+            bitmap_[i] = rhs.bitmap_[i];
+        }
     }
     return *this;
 }
 
 // Move Constructor
-Card::Card(Card&& rhs) 
-    : cardType_(rhs.cardType_), instruction_(std::move(rhs.instruction_)), 
-      bitmap_(rhs.bitmap_), drawn_(rhs.drawn_) {
+Card::Card(Card&& rhs) : cardType_(rhs.cardType_), instruction_(std::move(rhs.instruction_)), bitmap_(rhs.bitmap_), drawn_(rhs.drawn_) {
     rhs.bitmap_ = nullptr;
 }
 
 // Move Assignment Operator
 Card& Card::operator=(Card&& rhs) {
     if (this != &rhs) {
-        delete[] bitmap_;
         cardType_ = rhs.cardType_;
         instruction_ = std::move(rhs.instruction_);
+        delete[] bitmap_;
         bitmap_ = rhs.bitmap_;
         drawn_ = rhs.drawn_;
         rhs.bitmap_ = nullptr;
@@ -46,8 +47,10 @@ Card& Card::operator=(Card&& rhs) {
 }
 
 // Default Constructor
-Card::Card() : cardType_(POINT_CARD), bitmap_(new int[80]{}), drawn_(false) {
-    // bitmap_ is dynamically allocated with size 80, initialized to zeros
+Card::Card() : cardType_(POINT_CARD), instruction_(""), bitmap_(new int[80]), drawn_(false) {
+    for(int i = 0; i < 80; ++i) {
+        bitmap_[i] = 0;
+    }
 }
 
 std::string Card::getType() const {

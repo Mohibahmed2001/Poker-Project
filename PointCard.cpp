@@ -1,4 +1,6 @@
 #include "PointCard.hpp"
+#include<iostream>
+using namespace std;
 
 PointCard::PointCard() : Card() {
 }

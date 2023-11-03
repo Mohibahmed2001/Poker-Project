@@ -1,4 +1,6 @@
 #include "ActionCard.hpp"
+#include<iostream>
+using namespace std;
 
 ActionCard::ActionCard() : Card() {
 }
