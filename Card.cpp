@@ -1,4 +1,9 @@
 #include "Card.hpp"
+#include <iostream> 
+#include <string>   
+#include <algorithm>
+#include <vector>
+
 
 // Destructor
 Card::~Card() {

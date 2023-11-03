@@ -1,33 +1,47 @@
-#include "ActionCard.hpp"
-#include<iostream>
-using namespace std;
+#ifndef ACTIONCARD_HPP
+#define ACTIONCARD_HPP
 
-ActionCard::ActionCard() : Card() {
-}
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <regex>
+#include "Card.hpp"
 
-bool ActionCard::isPlayable() {
-    if (!getDrawn()) {
-        return false; 
+class ActionCard : public Card
+{
+public:
+    // Constructor
+    ActionCard() : Card() {
+         setType(ACTION_CARD);// Initialize any ActionCard specific members if any
     }
-    std::string instruction = getInstruction();
-    std::regex validPattern("(DRAW [1-9]\\d* CARD(S)?)|(PLAY [1-9]\\d* CARD(S)?)|(REVERSE HAND)|(SWAP HAND WITH OPPONENT)");
-    return std::regex_match(instruction, validPattern);
-}
 
-void ActionCard::Print() const {
-    std::cout << "Type: " << (getType() == "Action Card" ? "Action Card" : "Unknown") << std::endl;
-    std::cout << "Instruction: " << getInstruction() << std::endl;
-    std::cout << "Card: " << std::endl;
-
-    const int* imageData = getImageData();
-    if (imageData) {
-        for (int i = 0; i < 80; ++i) {
-            std::cout << imageData[i] << " ";
-            if ((i + 1) % 10 == 0) { 
-                std::cout << std::endl;
-            }
+    // isPlayable method
+    virtual bool isPlayable() override {
+        if (!getDrawn()) {
+            return false; // Card must be drawn to be playable
         }
-    } else {
-        std::cout << "No image data" << std::endl;
+
+        // Check if the instruction is valid
+        std::regex validInstructionPattern("(DRAW|PLAY)\\s+\\d+\\s+CARD\\(S\\)|REVERSE HAND|SWAP HAND WITH OPPONENT");
+        return std::regex_match(getInstruction(), validInstructionPattern);
     }
-}
+
+    // Print method
+    virtual void Print() const override {
+        std::cout << "Type: " << getType() << std::endl
+                  << "Instruction: " << getInstruction() << std::endl
+                  << "Card: " << std::endl;
+        const int* imageData = getImageData();
+        if (imageData) {
+            for (int i = 0; i < 80; ++i) {
+                std::cout << imageData[i];
+                if ((i + 1) % 10 == 0) // Assuming you want to print 10 numbers per line
+                    std::cout << std::endl;
+            }
+        } else {
+            std::cout << "No image data" << std::endl;
+        }
+    }
+};
+
+#endif // ACTIONCARD_HPP
