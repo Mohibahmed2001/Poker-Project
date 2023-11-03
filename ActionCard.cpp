@@ -1,47 +1,34 @@
-#ifndef ACTIONCARD_HPP
-#define ACTIONCARD_HPP
+#include "ActionCard.hpp"
 
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <regex>
-#include "Card.hpp"
+// Constructor implementation
+ActionCard::ActionCard() {
+    setType(ACTION_CARD); // Set the card type to ACTION_CARD
+}
 
-class ActionCard : public Card
-{
-public:
-    // Constructor
-    ActionCard() : Card() {
-         setType(ACTION_CARD);// Initialize any ActionCard specific members if any
+// isPlayable method implementation
+bool ActionCard::isPlayable() {
+    if (!getDrawn()) {
+        return false; // Card must be drawn to be playable
     }
 
-    // isPlayable method
-    virtual bool isPlayable() override {
-        if (!getDrawn()) {
-            return false; // Card must be drawn to be playable
+    // Regex to match the valid instructions
+    std::regex validInstructionPattern("(DRAW|PLAY)\\s+\\d+\\s+CARD\\(S\\)|REVERSE HAND|SWAP HAND WITH OPPONENT");
+    return std::regex_match(getInstruction(), validInstructionPattern);
+}
+
+// Print method implementation
+void ActionCard::Print() const {
+    std::cout << "Type: " << getType() << std::endl
+              << "Instruction: " << getInstruction() << std::endl
+              << "Card: " << std::endl;
+    const int* imageData = getImageData();
+    if (imageData) {
+        for (int i = 0; i < 80; ++i) { // Assuming there are 80 integers in the image data array
+            std::cout << imageData[i];
+            if ((i + 1) % 10 == 0) // Assuming you want to print 10 numbers per line
+                std::cout << std::endl;
         }
-
-        // Check if the instruction is valid
-        std::regex validInstructionPattern("(DRAW|PLAY)\\s+\\d+\\s+CARD\\(S\\)|REVERSE HAND|SWAP HAND WITH OPPONENT");
-        return std::regex_match(getInstruction(), validInstructionPattern);
+    } else {
+        std::cout << "No image data" << std::endl;
     }
-
-    // Print method
-    virtual void Print() const override {
-        std::cout << "Type: " << getType() << std::endl
-                  << "Instruction: " << getInstruction() << std::endl
-                  << "Card: " << std::endl;
-        const int* imageData = getImageData();
-        if (imageData) {
-            for (int i = 0; i < 80; ++i) {
-                std::cout << imageData[i];
-                if ((i + 1) % 10 == 0) // Assuming you want to print 10 numbers per line
-                    std::cout << std::endl;
-            }
-        } else {
-            std::cout << "No image data" << std::endl;
-        }
-    }
-};
-
-#endif // ACTIONCARD_HPP
+}

@@ -59,7 +59,12 @@ Card::Card() : cardType_(POINT_CARD), instruction_(""), bitmap_(new int[80]), dr
 }
 
 std::string Card::getType() const {
-    return cardType_ == POINT_CARD ? "Point Card" : "Action Card";
+    if(cardType_==POINT_CARD){
+        return "POINT_CARD";
+    }
+    else if(cardType_==ACTION_CARD){
+        return "ACTION_CARD";
+    }
 }
 
 void Card::setType(const CardType& type) {
