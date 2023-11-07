@@ -1,32 +1,34 @@
 #include "ActionCard.hpp"
 
-// Constructor implementation
+// Constructor
 ActionCard::ActionCard() {
-    setType(ACTION_CARD); // Set the card type to ACTION_CARD
+    setType(CardType::ACTION_CARD);
 }
 
-// isPlayable method implementation
+// Check if the card is playable
 bool ActionCard::isPlayable() {
-    if (!getDrawn()) {
-        return false; // Card must be drawn to be playable
-    }
+    if (!getDrawn()) return false;
 
-    // Regex to match the valid instructions
-    std::regex validInstructionPattern("(DRAW|PLAY)\\s+\\d+\\s+CARD\\(S\\)|REVERSE HAND|SWAP HAND WITH OPPONENT");
-    return std::regex_match(getInstruction(), validInstructionPattern);
+    const std::string& instruction = getInstruction();
+    return instruction.find("DRAW") != std::string::npos ||
+           instruction.find("PLAY") != std::string::npos ||
+           instruction == "REVERSE HAND" ||
+           instruction == "SWAP HAND WITH OPPONENT";
 }
 
-// Print method implementation
+// Print the Action Card
 void ActionCard::Print() const {
-    std::cout << "Type: " << getType() << std::endl
-              << "Instruction: " << getInstruction() << std::endl
-              << "Card: " << std::endl;
+    std::cout << "Type: " << getType() << std::endl;
+    std::cout << "Instruction: " << getInstruction() << std::endl;
+    std::cout << "Card: " << std::endl;
+
     const int* imageData = getImageData();
     if (imageData) {
-        for (int i = 0; i < 80; ++i) { // Assuming there are 80 integers in the image data array
-            std::cout << imageData[i];
-            if ((i + 1) % 10 == 0) // Assuming you want to print 10 numbers per line
+        for (int i = 0; i < 80; ++i) {
+            std::cout << imageData[i] << " ";
+            if ((i + 1) % 10 == 0) { 
                 std::cout << std::endl;
+            }
         }
     } else {
         std::cout << "No image data" << std::endl;

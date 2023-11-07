@@ -1,68 +1,86 @@
 #include "Player.hpp"
 
-// Constructor
-Player::Player() {
-    // Dummy constructor
+Player::Player() : score_(0), opponent_(nullptr), actiondeck_(nullptr), pointdeck_(nullptr) {
+
 }
 
 // Destructor
 Player::~Player() {
-    // Dummy destructor
+    
 }
 
+// Get Hand
 const Hand& Player::getHand() const {
-    // Dummy implementation, returning an empty hand
     return hand_;
 }
 
+// Set Hand
 void Player::setHand(const Hand& hand) {
-    // Dummy implementation
+    hand_ = hand;
 }
 
+// Get Score
 int Player::getScore() const {
-    // Dummy implementation, always returning 0
     return score_;
 }
 
+// Set Score
 void Player::setScore(const int& score) {
-    // Dummy implementation
+    score_ = score;
 }
 
+// Play an ActionCard
 void Player::play(ActionCard&& card) {
-    // Dummy implementation
+    std::cout << "PLAYING ACTION CARD: " << card.getInstruction() << std::endl;
 }
 
+// Draw a PointCard
 void Player::drawPointCard() {
-    // Dummy implementation
+    if (pointdeck_ && !pointdeck_->IsEmpty()) {
+        PointCard card = std::move(pointdeck_->Draw());
+        hand_.addCard(std::move(card));
+    } else {
+        throw std::runtime_error("Point deck is empty or not set.");
+    }
 }
 
+// Play a PointCard
 void Player::playPointCard() {
-    // Dummy implementation
+    try {
+        int points = hand_.PlayCard();
+        score_ += points;
+        std::cout << "Played a PointCard for " << points << " points." << std::endl;
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }
 
+// Set Opponent
 void Player::setOpponent(Player* opponent) {
-    // Dummy implementation
+    opponent_ = opponent;
 }
 
+// Get Opponent
 Player* Player::getOpponent() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return opponent_;
 }
 
+// Set ActionDeck
 void Player::setActionDeck(Deck<ActionCard>* actiondeck) {
-    // Dummy implementation
+    actiondeck_ = actiondeck;
 }
 
+// Get ActionDeck
 Deck<ActionCard>* Player::getActionDeck() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return actiondeck_;
 }
 
+// Set PointDeck
 void Player::setPointDeck(Deck<PointCard>* pointdeck) {
-    // Dummy implementation
+    pointdeck_ = pointdeck;
 }
 
+// Get PointDeck
 Deck<PointCard>* Player::getPointDeck() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return pointdeck_;
 }
