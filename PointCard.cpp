@@ -6,10 +6,10 @@ PointCard::PointCard() {
     setType(CardType::POINT_CARD);
 }
 
+// Check if the card is playable
 bool PointCard::isPlayable() {
-    if (!getDrawn() || getInstruction().empty()) return false;   
-    int points = std::stoi(getInstruction());
-    return points >= 1 && points <= 99;
+    // Assuming 'instruction_' contains a number in string format
+    return getDrawn() && !getInstruction().empty() && std::all_of(getInstruction().begin(), getInstruction().end(), ::isdigit);
 }
 
 // Print the Point Card
@@ -22,7 +22,7 @@ void PointCard::Print() const {
     if (imageData) {
         for (int i = 0; i < 80; ++i) {
             std::cout << imageData[i] << " ";
-            if ((i + 1) % 10 == 0) { 
+            if ((i + 1) % 10 == 0) { // Newline every 10 numbers for formatting
                 std::cout << std::endl;
             }
         }

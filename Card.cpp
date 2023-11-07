@@ -2,26 +2,26 @@
 
 // Destructor
 Card::~Card() {
-    delete[] bitmap_;  
+    delete[] bitmap_;
 }
 
 // Copy Constructor
-Card::Card(const Card& rhs) : cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
-    bitmap_ = new int[80];  
+Card::Card(const Card& rhs)
+    : cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
+    bitmap_ = new int[80];
     std::copy(rhs.bitmap_, rhs.bitmap_ + 80, bitmap_);
 }
 
 // Copy Assignment Operator
 Card& Card::operator=(const Card& rhs) {
     if (this != &rhs) {
-        cardType_ = rhs.cardType_;  
+        cardType_ = rhs.cardType_;
         instruction_ = rhs.instruction_;
         drawn_ = rhs.drawn_;
-        
-        int* newBitmap = new int[80];
-        std::copy(rhs.bitmap_, rhs.bitmap_ + 80, newBitmap);
+
         delete[] bitmap_;
-        bitmap_ = newBitmap;
+        bitmap_ = new int[80];
+        std::copy(rhs.bitmap_, rhs.bitmap_ + 80, bitmap_);
     }
     return *this;
 }
@@ -33,23 +33,21 @@ Card::Card(Card&& rhs)
 }
 
 // Move Assignment Operator
-Card& Card::operator=(Card&& rhs)  {
+Card& Card::operator=(Card&& rhs) {
     if (this != &rhs) {
-        cardType_ = rhs.cardType_;  
+        cardType_ = rhs.cardType_;
         instruction_ = std::move(rhs.instruction_);
-        delete[] bitmap_;  
+        delete[] bitmap_;
         bitmap_ = rhs.bitmap_;
-        drawn_ = rhs.drawn_; 
+        drawn_ = rhs.drawn_;
+
         rhs.bitmap_ = nullptr;
     }
     return *this;
 }
 
 // Default Constructor
-Card::Card() : cardType_(CardType::POINT_CARD), instruction_(""), bitmap_(new int[80]{}), drawn_(false) {}
-
-
-
+Card::Card() : bitmap_(new int[80]{}), drawn_(false) {}
 
 // getType
 std::string Card::getType() const {
@@ -95,4 +93,4 @@ void Card::setDrawn(const bool& drawn) {
     drawn_ = drawn;
 }
 
-
+// Print and isPlayable are pure virtual and will be implemented in derived classes.
