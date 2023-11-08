@@ -1,56 +1,61 @@
 #include "Hand.hpp"
 
-// Constructor
 Hand::Hand() {
-    // Dummy constructor
+    cards_.clear();
 }
 
-// Destructor
 Hand::~Hand() {
-    // Dummy destructor
 }
 
-// Copy Constructor
 Hand::Hand(const Hand& other) {
-    // Dummy copy constructor
+    cards_ = other.cards_;
 }
 
-// Copy Assignment Operator
 Hand& Hand::operator=(const Hand& other) {
-    // Dummy copy assignment operator
+    if (this != &other) {
+        cards_ = other.cards_;
+    }
     return *this;
 }
 
-// Move Constructor
 Hand::Hand(Hand&& other) {
-    // Dummy move constructor
+    cards_ = std::move(other.cards_);
 }
 
-// Move Assignment Operator
 Hand& Hand::operator=(Hand&& other) {
-    // Dummy move assignment operator
+    if (this != &other) {
+        cards_ = std::move(other.cards_);
+    }
     return *this;
 }
 
 const std::deque<PointCard>& Hand::getCards() const {
-    // Dummy implementation, returning an empty deque
     return cards_;
 }
 
 void Hand::addCard(PointCard&& card) {
-    // Dummy implementation
+    cards_.push_back(std::move(card));
 }
 
 bool Hand::isEmpty() const {
-    // Dummy implementation, always returning true
-    return true;
+    return cards_.empty();
 }
 
 void Hand::Reverse() {
-    // Dummy implementation
+    std::reverse(cards_.begin(), cards_.end());
 }
 
 int Hand::PlayCard() {
-    // Dummy implementation, returning 0
+    if (cards_.empty()) {
+        throw std::runtime_error("Hand is empty. Cannot play a card.");
+    }
+
+    PointCard frontCard = std::move(cards_.front());
+    cards_.pop_front();
+
+    if (frontCard.isPlayable()) {
+        return frontCard.getPoints();
+    }
+
     return 0;
 }
