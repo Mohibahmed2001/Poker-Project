@@ -2,13 +2,11 @@
 
 // Constructor
 ActionCard::ActionCard() {
-    // Set the type specific for ActionCard
     setType(CardType::ACTION_CARD);
 }
 
 // Check if the card is playable
 bool ActionCard::isPlayable() {
-    // Simplified logic for demonstration purposes. You'd need a more complex check for the different valid instructions.
     if (!getDrawn()) return false;
 
     const std::string& instruction = getInstruction();
@@ -28,7 +26,7 @@ void ActionCard::Print() const {
     if (imageData) {
         for (int i = 0; i < 80; ++i) {
             std::cout << imageData[i] << " ";
-            if ((i + 1) % 10 == 0) { // Newline every 10 numbers for formatting
+            if ((i + 1) % 10 == 0) { 
                 std::cout << std::endl;
             }
         }
