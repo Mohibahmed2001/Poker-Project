@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+
 template <typename CardType>
 Deck<CardType>::Deck() {
     cards_.clear();
