@@ -1,8 +1,8 @@
 /*
 CSCI335 Fall 2023
 Assignment 1 – Card Game
-Name
-Date
+Name Mohib Ahmed
+Date 
 Card.hpp defines the Card class and its member functions.
 */
 
@@ -57,11 +57,11 @@ class Card
         Card();
 
         /**
-         * @return the string representation of the card type
+         * @return the string representation of the card type ACTION_CARD or POINT_CARD
          */
         std::string getType() const;
         /**
-         * @post: set the card type
+         * @post: set the card type 
          * @param const reference to a CardType object
          */
         void setType(const CardType& type);

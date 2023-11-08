@@ -1,121 +1,95 @@
-#include "Card.hpp"
-#include <iostream>
 
+#include "Card.hpp"
+using namespace std;
+
+// Destructor
 Card::~Card() {
-    std::cout << "Destructor is called" << std::endl;
     delete[] bitmap_;
 }
 
 // Copy Constructor
-Card::Card(const Card& rhs) {
-    std::cout << "Copy constructor called" << std::endl;
-    cardType_ = rhs.cardType_;
-    instruction_ = rhs.instruction_;
-
-    // Allocate memory for the bitmap and copy the data
-    bitmap_ = new int[80];
-    for (int i = 0; i < 80; i++) {
-        bitmap_[i] = rhs.bitmap_[i];
-    }
-
-    drawn_ = rhs.drawn_;
+Card::Card(const Card& rhs) :cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
+    bitmap_ = new int{*rhs.bitmap_};
 }
 
 // Copy Assignment Operator
 Card& Card::operator=(const Card& rhs) {
     if (this != &rhs) {
-        std::cout << "Copy assignment called" << std::endl;
-
-        // Release the existing bitmap
-        delete[] bitmap_;
-
         cardType_ = rhs.cardType_;
         instruction_ = rhs.instruction_;
-
-        // Allocate memory for the new bitmap and copy the data
-        bitmap_ = new int[80];
-        for (int i = 0; i < 80; i++) {
-            bitmap_[i] = rhs.bitmap_[i];
-        }
-
         drawn_ = rhs.drawn_;
+        bitmap_ = rhs.bitmap_;
     }
     return *this;
 }
 
 // Move Constructor
-Card::Card(Card&& rhs) {
-    std::cout << "Move constructor called" << std::endl;
-
-    cardType_ = rhs.cardType_;
+Card::Card(Card&& rhs){
+    cardType_ = std::move(rhs.cardType_);
     instruction_ = std::move(rhs.instruction_);
-
-    // Move the existing bitmap and reset rhs
     bitmap_ = rhs.bitmap_;
     rhs.bitmap_ = nullptr;
-
-    drawn_ = rhs.drawn_;
+    drawn_ = std::move(rhs.drawn_);
 }
 
 // Move Assignment Operator
 Card& Card::operator=(Card&& rhs) {
     if (this != &rhs) {
-        std::cout << "Move assignment called" << std::endl;
-
-        // Release the existing bitmap
         delete[] bitmap_;
-
-        cardType_ = rhs.cardType_;
-        instruction_ = std::move(rhs.instruction_);
-
-        // Move the existing bitmap and reset rhs
-        bitmap_ = rhs.bitmap_;
+        std::swap(cardType_,rhs.cardType_);
+        std::swap(instruction_,rhs.instruction_);
+        std::swap(bitmap_,rhs.bitmap_);
+        std::swap(drawn_,rhs.drawn_);
         rhs.bitmap_ = nullptr;
-
-        drawn_ = rhs.drawn_;
     }
     return *this;
 }
 
 // Default Constructor
-Card::Card() = default;
+Card::Card() : cardType_(ACTION_CARD),instruction_(""),bitmap_(nullptr), drawn_(false) {}
 
-// Other member functions
+// getType
 std::string Card::getType() const {
-    return (cardType_ == POINT_CARD) ? "POINT_CARD" : "ACTION_CARD";
+    if( cardType_==ACTION_CARD){
+        return "ACTION_CARD";
+    }
+    else{
+        return "POINT_CARD";
+    }
 }
 
+// setType
 void Card::setType(const CardType& type) {
     cardType_ = type;
 }
 
+// getInstruction
 const std::string& Card::getInstruction() const {
     return instruction_;
 }
 
+// setInstruction
 void Card::setInstruction(const std::string& instruction) {
     instruction_ = instruction;
 }
 
+// getImageData
 const int* Card::getImageData() const {
     return bitmap_;
 }
 
+// setImageData
 void Card::setImageData(int* data) {
-    // Release existing bitmap
     delete[] bitmap_;
-    
-    // Allocate new memory for the bitmap and copy the data
-    bitmap_ = new int[80];
-    for (int i = 0; i < 80; i++) {
-        bitmap_[i] = data[i];
-    }
+    bitmap_ = data;
 }
 
+// getDrawn
 bool Card::getDrawn() const {
     return drawn_;
 }
 
+// setDrawn
 void Card::setDrawn(const bool& drawn) {
     drawn_ = drawn;
 }

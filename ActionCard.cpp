@@ -1,71 +1,30 @@
 #include "ActionCard.hpp"
-#include<iostream>
-using namespace std;
-  /* @post: Construct a new Action Card object
-        */
-        ActionCard::ActionCard(){
-            setType(ACTION_CARD);
-        }
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <regex>
+ActionCard::ActionCard() : Card() {
+    // You can do additional initializations specific to ActionCard here if needed.
+}
 
-        /**
-         * @return true if the card is playable, false otherwise
-         * For a card to be playable, it has to be drawn and the instruction has to be valid
-         * Valid instructions:
-         * DRAW x CARD(S) : assume x is a positive integer
-         * PLAY x CARD(S) : assume x is a positive integer
-         * REVERSE HAND : reverse the order of the cards in the hand
-         * SWAP HAND WITH OPPONENT : swap the hand with the opponent
-        */
-    bool ActionCard::isPlayable() {
-    // Check if the card is drawn
+// Check if the card is playable
+bool ActionCard::isPlayable() {
+    // Card must be drawn and instruction must be valid
     if (!getDrawn()) {
         return false;
     }
-    const string& instruction = getInstruction();
-    if (instruction == "REVERSE HAND" || instruction == "SWAP HAND WITH OPPONENT") {
-        return true;
-    }
-    if (instruction.size() >= 5) {
-        string prefix = instruction.substr(0, 4);
-        if (prefix == "DRAW" || prefix == "PLAY") {
-            // Check if the remaining part is a positive integer
-            string numberStr = instruction.substr(5);
-            for (char c : numberStr) {
-                if (!isdigit(c)) {
-                    return false;  // Not a digit
-                }
-            }
-            int num = stoi(numberStr);
-            if (num > 0) {
-                return true;  
-            }
-        }
-    }
 
-    return false;
+    // Check if instruction matches any of the valid instructions
+    std::string instruction = getInstruction();
+    std::regex validPattern(R"(^(DRAW \d+ CARD\(S\)|PLAY \d+ CARD\(S\)|REVERSE HAND|SWAP HAND WITH OPPONENT)$)");
+    return std::regex_match(instruction, validPattern);
 }
-        /**
-         * @post: Print the ActionCard in the following format:
-         * Type: [CardType]
-         * Instruction: [Instruction]
-         * Card: 
-         * [ImageData]
-         * 
-         * Note: For [ImageData]: If there is no image data, print "No image data" instead
-         */
-       void ActionCard::Print() const {
-         cout << "Type: " << getType() << endl;
-    cout << "Instruction: " << getInstruction() << endl;
-    cout << "Card:" << endl;
 
-    const int* imageData = getImageData();
-    if (imageData) {
-        cout << "Image Data:" << endl;
-        for (int i = 0; i < 80; i++) {
-            cout << imageData[i] << " ";
-        }
-        cout << endl;
-    } else {
-        cout << "No image data" << endl;
-    }
+// Print the ActionCard information
+void ActionCard::Print() const {
+    std::cout << "Type: " << getType() << std::endl;
+    std::cout << "Instruction: " << getInstruction() << std::endl;
+    std::cout << "Card: " << std::endl;
+     std::cout << getImageData() << std::endl;
 }
+
