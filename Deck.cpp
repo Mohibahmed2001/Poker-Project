@@ -1,46 +1,53 @@
 #include "Deck.hpp"
-#include "Card.hpp"
-#include <iostream>    
-       template <typename CardType>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <random>
+template <typename CardType>
 Deck<CardType>::Deck() {
-    // Dummy constructor
+    cards_.clear();
 }
 
 template <typename CardType>
 Deck<CardType>::~Deck() {
-    // Dummy destructor
 }
 
 template <typename CardType>
 void Deck<CardType>::AddCard(const CardType& card) {
-    // Dummy implementation
+    cards_.push_back(card);
 }
 
 template <typename CardType>
 CardType&& Deck<CardType>::Draw() {
-    // Dummy implementation, returning a default-constructed CardType
-    return CardType();
+    if (cards_.empty()) {
+        throw std::runtime_error("Deck is empty. Cannot draw a card.");
+    }
+
+    CardType drawnCard = std::move(cards_.back());
+    cards_.pop_back();
+
+    return std::move(drawnCard);
 }
 
 template <typename CardType>
 bool Deck<CardType>::IsEmpty() const {
-    // Dummy implementation, always returning true
-    return true;
+    return cards_.empty();
 }
 
 template <typename CardType>
 void Deck<CardType>::Shuffle() {
-    // Dummy implementation, no actual shuffling
+    std::mt19937 rng(2028358904);
+    std::shuffle(cards_.begin(), cards_.end(), rng);
 }
 
 template <typename CardType>
 int Deck<CardType>::getSize() const {
-    // Dummy implementation, always returning 0
-    return 0;
+    return static_cast<int>(cards_.size());
 }
 
 template <typename CardType>
 std::vector<CardType> Deck<CardType>::getDeck() const {
-    // Dummy implementation, returning an empty vector
-    return std::vector<CardType>();
+    return cards_;
 }
+
+template class Deck<Card>;
