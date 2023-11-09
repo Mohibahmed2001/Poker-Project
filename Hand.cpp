@@ -1,16 +1,18 @@
 #include "Hand.hpp"
 
+// Constructor
 Hand::Hand() {
-    cards_.clear();
 }
 
+// Destructor
 Hand::~Hand() {
 }
 
-Hand::Hand(const Hand& other) {
-    cards_ = other.cards_;
+// Copy Constructor
+Hand::Hand(const Hand& other) : cards_(other.cards_) {
 }
 
+// Copy Assignment Operator
 Hand& Hand::operator=(const Hand& other) {
     if (this != &other) {
         cards_ = other.cards_;
@@ -18,10 +20,11 @@ Hand& Hand::operator=(const Hand& other) {
     return *this;
 }
 
-Hand::Hand(Hand&& other) {
-    cards_ = std::move(other.cards_);
+// Move Constructor
+Hand::Hand(Hand&& other) : cards_(std::move(other.cards_)) {
 }
 
+// Move Assignment Operator
 Hand& Hand::operator=(Hand&& other) {
     if (this != &other) {
         cards_ = std::move(other.cards_);
@@ -29,33 +32,39 @@ Hand& Hand::operator=(Hand&& other) {
     return *this;
 }
 
+// Get Cards
 const std::deque<PointCard>& Hand::getCards() const {
     return cards_;
 }
 
+// Add a Card to the Hand
 void Hand::addCard(PointCard&& card) {
     cards_.push_back(std::move(card));
 }
 
+// Check if the Hand is Empty
 bool Hand::isEmpty() const {
     return cards_.empty();
 }
 
+// Reverse the Hand
 void Hand::Reverse() {
     std::reverse(cards_.begin(), cards_.end());
 }
 
+// Play a Card from the Hand
 int Hand::PlayCard() {
-    if (cards_.empty()) {
-        throw std::runtime_error("Hand is empty. Cannot play a card.");
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot play a card from an empty hand.");
     }
 
-    PointCard frontCard = std::move(cards_.front());
-    cards_.pop_front();
-
-    if (frontCard.isPlayable()) {
-        return frontCard.getPoints();
+    PointCard& frontCard = cards_.front();
+    if (!frontCard.isPlayable()) {
+        cards_.pop_front(); 
+        throw std::runtime_error("The card is not playable.");
     }
 
-    return 0;
+    int points = std::stoi(frontCard.getInstruction()); 
+    cards_.pop_front(); 
+    return points;
 }
