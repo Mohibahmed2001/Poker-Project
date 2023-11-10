@@ -1,59 +1,77 @@
-#include "Deck.hpp"
+#include "Hand.hpp"
+#include <string>
 #include <algorithm>
-#include "Card.hpp"
 
-template <typename CardType>
-Deck<CardType>::Deck() : cards_() {
-
-}
-
-template <typename CardType>
-Deck<CardType>::~Deck(){
+Hand::Hand() : cards_()
+{
 
 }
 
-template <typename CardType>
-void Deck<CardType>::AddCard(const CardType &card)
-{   
+Hand::~Hand()
+{
+    cards_.clear();
+}
+
+Hand::Hand(const Hand &other) : cards_(other.cards_)
+{
+
+}
+
+Hand &Hand::operator=(const Hand &other)
+{
+    if(this != &other)
+        cards_ = other.cards_;
+    return *this;
+}
+
+Hand::Hand(Hand &&other) : cards_(std::move(other.cards_))
+{
     
+}
+
+Hand &Hand::operator=(Hand &&other)
+{
+    if(this != & other){
+        cards_ = std::move(other.cards_);
+    }
+    return *this;
+}
+
+const std::deque<PointCard> &Hand::getCards() const
+{
+    return cards_;
+}
+
+void Hand::addCard(PointCard &&card)
+{
+    card.setDrawn(true);
     cards_.push_back(card);
 }
 
-template <typename CardType>
-CardType &&Deck<CardType>::Draw()
-{
-    if(!IsEmpty()){
-        CardType&& card = std::move(cards_.back());
-        cards_.pop_back();
-        return std::move(card);
-    } else{
-        throw std::out_of_range("NO CARDS IN DECK");
-    }
-    
-   
-}
-
-template <typename CardType>
-bool Deck<CardType>::IsEmpty() const
+bool Hand::isEmpty() const
 {
     return cards_.empty();
 }
 
-template <typename CardType>
-void Deck<CardType>::Shuffle()
+void Hand::Reverse()
 {
-    std::mt19937 mt1(2028358904);
-    std::shuffle(cards_.begin(), cards_.end(),mt1);
+    std::reverse(cards_.begin(), cards_.end());
 }
 
-template <typename CardType>
-int Deck<CardType>::getSize() const
+int Hand::PlayCard()
 {
-    return (int) cards_.size();
-}
+    if(isEmpty()){
+        throw std::exception();
+    }
+    PointCard card = cards_.front();
 
-template <typename CardType>
-std::vector<CardType> Deck<CardType>::getDeck() const
-{
-    return cards_;
+    if(!card.isPlayable()){
+        cards_.pop_front();
+        throw std::exception();
+    }
+
+    int ret = std::stoi(card.getInstruction());
+
+    cards_.pop_front();
+    return ret;
 }
