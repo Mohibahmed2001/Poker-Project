@@ -2,44 +2,29 @@
 #include <string>
 #include <algorithm>
 
-Hand::Hand() : cards_()
-{
-
-}
-
+Hand::Hand() : cards_(){}
 Hand::~Hand()
 {
     cards_.clear();
 }
 
+Hand::Hand(const Hand &other) : cards_(other.cards_){}
 
-
-Hand::Hand(const Hand &other) : cards_(other.cards_)
-{
-
-}
-
-Hand &Hand::operator=(const Hand &other)
-{
+Hand &Hand::operator=(const Hand &other){
     if(this != &other)
         cards_ = other.cards_;
     return *this;
 }
 
-Hand::Hand(Hand &&other) : cards_(std::move(other.cards_))
-{
-    
-}
+Hand::Hand(Hand &&other) : cards_(std::move(other.cards_)){}
 
-Hand &Hand::operator= (Hand &&other)
+Hand &Hand::operator=(Hand &&other)
 {
     if(this != & other){
-        cards_ = std::move(other.cards_);
-    }
+        cards_ = std::move(other.cards_);}
     return *this;
 }
-
-const std::deque<PointCard>  &Hand::getCards() const
+const std::deque<PointCard> &Hand::getCards() const
 {
     return cards_;
 }
@@ -70,9 +55,7 @@ int Hand::PlayCard()
         cards_.pop_front();
         throw std::exception();
     }
-
     int ret = std::stoi(card.getInstruction());
-
     cards_.pop_front();
     return ret;
 }
