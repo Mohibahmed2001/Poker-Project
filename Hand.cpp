@@ -12,6 +12,8 @@ Hand::~Hand()
     cards_.clear();
 }
 
+
+
 Hand::Hand(const Hand &other) : cards_(other.cards_)
 {
 
@@ -29,7 +31,7 @@ Hand::Hand(Hand &&other) : cards_(std::move(other.cards_))
     
 }
 
-Hand &Hand::operator=(Hand &&other)
+Hand &Hand::operator= (Hand &&other)
 {
     if(this != & other){
         cards_ = std::move(other.cards_);
@@ -37,7 +39,7 @@ Hand &Hand::operator=(Hand &&other)
     return *this;
 }
 
-const std::deque<PointCard> &Hand::getCards() const
+const std::deque<PointCard>  &Hand::getCards() const
 {
     return cards_;
 }
@@ -64,7 +66,6 @@ int Hand::PlayCard()
         throw std::exception();
     }
     PointCard card = cards_.front();
-
     if(!card.isPlayable()){
         cards_.pop_front();
         throw std::exception();

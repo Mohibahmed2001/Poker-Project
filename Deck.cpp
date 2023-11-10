@@ -1,77 +1,59 @@
-#include "Hand.hpp"
-#include <string>
+#include "Deck.hpp"
 #include <algorithm>
+#include "Card.hpp"
 
-Hand::Hand() : cards_()
-{
-
-}
-
-Hand::~Hand()
-{
-    cards_.clear();
-}
-
-Hand::Hand(const Hand &other) : cards_(other.cards_)
-{
+template <typename CardType>
+Deck<CardType>::Deck() : cards_() {
 
 }
 
-Hand &Hand::operator=(const Hand &other)
-{
-    if(this != &other)
-        cards_ = other.cards_;
-    return *this;
+template <typename CardType>
+Deck<CardType>::~Deck(){
+
 }
 
-Hand::Hand(Hand &&other) : cards_(std::move(other.cards_))
-{
+template <typename CardType>
+void Deck<CardType>::AddCard(const CardType &card)
+{   
     
-}
-
-Hand &Hand::operator=(Hand &&other)
-{
-    if(this != & other){
-        cards_ = std::move(other.cards_);
-    }
-    return *this;
-}
-
-const std::deque<PointCard> &Hand::getCards() const
-{
-    return cards_;
-}
-
-void Hand::addCard(PointCard &&card)
-{
-    card.setDrawn(true);
     cards_.push_back(card);
 }
 
-bool Hand::isEmpty() const
+template <typename CardType>
+CardType &&Deck<CardType>::Draw()
+{
+    if(!IsEmpty()){
+        CardType&& card = std::move(cards_.back());
+        cards_.pop_back();
+        return std::move(card);
+    } else{
+        throw std::out_of_range("NO CARDS IN DECK");
+    }
+    
+   
+}
+
+template <typename CardType>
+bool Deck<CardType>::IsEmpty() const
 {
     return cards_.empty();
 }
 
-void Hand::Reverse()
+template <typename CardType>
+void Deck<CardType>::Shuffle()
 {
-    std::reverse(cards_.begin(), cards_.end());
+    std::mt19937 mt1(2028358904);
+    std::shuffle(cards_.begin(), cards_.end(),mt1);
 }
 
-int Hand::PlayCard()
+template <typename CardType>
+int Deck<CardType>::getSize() const
 {
-    if(isEmpty()){
-        throw std::exception();
-    }
-    PointCard card = cards_.front();
+    return (int) cards_.size();
+}
 
-    if(!card.isPlayable()){
-        cards_.pop_front();
-        throw std::exception();
-    }
-
-    int ret = std::stoi(card.getInstruction());
-
-    cards_.pop_front();
-    return ret;
+template <typename CardType>
+std::vector<CardType> Deck<CardType>::getDeck() const
+{
+    return cards_;
 }
