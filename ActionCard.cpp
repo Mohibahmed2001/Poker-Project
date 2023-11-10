@@ -3,13 +3,24 @@
 #include <string>
 #include <cctype>
 #include <regex>
+/**
+         * @post: Construct a new Action Card object
+        */
 ActionCard::ActionCard() : Card() {
-    // You can do additional initializations specific to ActionCard here if needed.
 }
 
-// Check if the card is playable
+
+        /**
+         * @return true if the card is playable, false otherwise
+         * For a card to be playable, it has to be drawn and the instruction has to be valid
+         * Valid instructions:
+         * DRAW x CARD(S) : assume x is a positive integer
+         * PLAY x CARD(S) : assume x is a positive integer
+         * REVERSE HAND : reverse the order of the cards in the hand
+         * SWAP HAND WITH OPPONENT : swap the hand with the opponent
+        */
 bool ActionCard::isPlayable() {
-    // Card must be drawn and instruction must be valid
+  
     if (!getDrawn()) {
         return false;
     }
@@ -19,7 +30,15 @@ bool ActionCard::isPlayable() {
     return std::regex_match(instruction, validPattern);
 }
 
-// Print the ActionCard information
+/**
+         * @post: Print the ActionCard in the following format:
+         * Type: [CardType]
+         * Instruction: [Instruction]
+         * Card: 
+         * [ImageData]
+         * 
+         * Note: For [ImageData]: If there is no image data, print "No image data" instead
+         */
 void ActionCard::Print() const {
     std::cout << "Type: " << getType() << std::endl;
     std::cout << "Instruction: " << getInstruction() << std::endl;

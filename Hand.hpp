@@ -1,8 +1,8 @@
 /*
 CSCI335 Fall 2023
 Assignment 1 – Card Game
-Name
-Date
+Name Mohib Ahmed
+Date 11/7/23
 Hand.cpp Defines the Hand class.
 */
 

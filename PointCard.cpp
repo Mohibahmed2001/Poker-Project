@@ -1,18 +1,30 @@
 #include "PointCard.hpp"
 
-// Constructor
+/**
+         * @post: Construct a new Point Card object
+         */
 PointCard::PointCard() {
-    // Set the type specific for PointCard
     setType(CardType::POINT_CARD);
 }
-
+/**
+         * @return true if the card is playable, false otherwise
+         * For a card to be playable, it has to be drawn and the instruction has to be a valid number
+        */
 bool PointCard::isPlayable() {
     if (!getDrawn() || getInstruction().empty()) return false;   
     int points = std::stoi(getInstruction());
     return points >= 1 && points <= 99;
 }
 
-// Print the Point Card
+/**
+         * @post: Print the Point Card in the following format:
+         * Type: [CardType]
+         * Points: [Instruction]
+         * Card: 
+         * [ImageData]
+         * 
+         * Note: For [ImageData]: If there is no image data, print "No image data" instead
+         */
 void PointCard::Print() const {
     std::cout << "Type: " << getType() << std::endl;
     std::cout << "Points: " << getInstruction() << std::endl;

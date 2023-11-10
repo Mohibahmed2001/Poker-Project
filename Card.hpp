@@ -2,8 +2,8 @@
 CSCI335 Fall 2023
 Assignment 1 – Card Game
 Name Mohib Ahmed
-Date 
-Card.hpp defines the Card class and its member functions.
+Date 11/7/23
+Card.hpp defines the Card class.
 */
 
 #ifndef CARD_HPP

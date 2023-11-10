@@ -1,9 +1,9 @@
 /*
 CSCI335 Fall 2023
 Assignment 1 – Card Game
-Name
-Date
-Player.cpp implements the Player class.
+Name Mohib Ahmed
+Date 11/7/23
+Player.hpp defines the Player class.
 */
 
 #ifndef PLAYER_HPP
@@ -104,3 +104,4 @@ class Player
 };
 
 #endif
+
