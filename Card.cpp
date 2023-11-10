@@ -109,7 +109,7 @@ void Card::setInstruction(const std::string& instruction) {
 const int* Card::getImageData() const {
     return bitmap_;
 }
- /**
+        /**
          * @post: Set the image data
          * @param pointer to an array of integers
          */
@@ -125,7 +125,7 @@ bool Card::getDrawn() const {
     return drawn_;
 }
 
-// setDrawn
+// @return drawn
 void Card::setDrawn(const bool& drawn) {
     drawn_ = drawn;
 }
