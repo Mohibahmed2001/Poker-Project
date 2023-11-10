@@ -1,68 +1,62 @@
 #include "Player.hpp"
 
-// Constructor
-Player::Player() {
-    // Dummy constructor
-}
+Player::Player() : score_(0), opponent_(nullptr), actiondeck_(nullptr), pointdeck_(nullptr) {}
 
-// Destructor
-Player::~Player() {
-    // Dummy destructor
-}
+Player::~Player() {}
 
 const Hand& Player::getHand() const {
-    // Dummy implementation, returning an empty hand
     return hand_;
 }
 
 void Player::setHand(const Hand& hand) {
-    // Dummy implementation
+    hand_ = hand;
 }
 
 int Player::getScore() const {
-    // Dummy implementation, always returning 0
     return score_;
 }
 
 void Player::setScore(const int& score) {
-    // Dummy implementation
+    score_ = score;
 }
 
 void Player::play(ActionCard&& card) {
-    // Dummy implementation
+    std::cout << "PLAYING ACTION CARD: " << card.getInstruction() << std::endl;
+    // Implement the logic for playing an action card
 }
 
 void Player::drawPointCard() {
-    // Dummy implementation
+    if (!pointdeck_->IsEmpty()) {
+        hand_.addCard(pointdeck_->Draw());
+    }
 }
 
 void Player::playPointCard() {
-    // Dummy implementation
+    if (!hand_.isEmpty()) {
+        score_ += hand_.PlayCard();
+    }
 }
 
 void Player::setOpponent(Player* opponent) {
-    // Dummy implementation
+    opponent_ = opponent;
 }
 
 Player* Player::getOpponent() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return opponent_;
 }
 
 void Player::setActionDeck(Deck<ActionCard>* actiondeck) {
-    // Dummy implementation
+    actiondeck_ = actiondeck;
 }
 
 Deck<ActionCard>* Player::getActionDeck() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return actiondeck_;
 }
 
 void Player::setPointDeck(Deck<PointCard>* pointdeck) {
-    // Dummy implementation
+    pointdeck_ = pointdeck;
 }
 
 Deck<PointCard>* Player::getPointDeck() {
-    // Dummy implementation, returning a nullptr
-    return nullptr;
+    return pointdeck_;
 }
