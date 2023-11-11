@@ -5,7 +5,7 @@
          * @post: Construct a new Deck object
          */
 template <typename CardType>
-Deck<CardType>::Deck() : cards_() {
+Deck<CardType>::Deck(){
 
 }
         /**
