@@ -1,35 +1,29 @@
 #include "Deck.hpp"
 #include <algorithm>
 #include "Card.hpp"
-/**
-         * @post: Construct a new Deck object
-         */
+
+
+//Zero Parameter Constructor
 template <typename CardType>
 Deck<CardType>::Deck() : cards_() {
 
 }
-        /**
-         * @post: Destroy the Deck object 
-         */
+
+//Object Destructor
 template <typename CardType>
 Deck<CardType>::~Deck(){
     cards_.~vector();
 }
- /**
-         * @post: Add a Card to the Deck
-         * @param: const reference to CardType card
-         */
+
+//Adds a card to the Deck
 template <typename CardType>
 void Deck<CardType>::AddCard(const CardType &card)
 {
     cards_.push_back(card);
     
 }
-/**
-         * @post: Draw a card from the deck
-         * @pre: the deck is not empty
-         * @return the right hand value of type CardType 
-         */
+
+//Draws a card from the deck 
 template <typename CardType>
 CardType &&Deck<CardType>::Draw()
 {
@@ -45,41 +39,32 @@ CardType &&Deck<CardType>::Draw()
    
 }
 
-
-        /**
-         * @return if the deck is empty 
-         */
+//Returns true if the deck is empty 
 template <typename CardType>
 bool Deck<CardType>::IsEmpty() const
 {
     return cards_.empty();
 }
-/**
-         * @return the size of the deck 
-         */
-template <typename CardType>
-void Deck<CardType>::Shuffle()
-{
-    std::mt19937 mt1(2028358904);
-    std::shuffle(cards_.begin(), cards_.end(),mt1);
-}
-/**
-         * @return the vector of cards in the deck 
-         */
+
+
+//Shuffles the deck with the given seed 
 template <typename CardType>
 void Deck<CardType>::Shuffle()
 {
     std::mt19937 mt1(2028358904); //given seed
     std::shuffle(cards_.begin(), cards_.end(),mt1);
 }
-/**
-         * @return the vector of cards in the deck 
-         */
+
+
+//Returns the size of the deck as an int
 template <typename CardType>
 int Deck<CardType>::getSize() const
 {
     return (int) cards_.size();
 }
+
+
+//returns the Deck as a vector<CardType>
 template <typename CardType>
 std::vector<CardType> Deck<CardType>::getDeck() const
 {
