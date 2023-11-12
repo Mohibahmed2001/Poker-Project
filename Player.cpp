@@ -50,9 +50,10 @@ void Player::setScore(const int &score)
          */
 void Player::play(ActionCard &&card)
 {
-
+    //NOT WORKING FULLY STILLL RUNNINNGINTO ISSUE WITH ONE OF THE HANDS
+    // WILL LEAVE AND SUBMTI THIS VERSION UNTIL LAST POINT CAN BE SOLVED
     std::string instruction = card.getInstruction();
-    std::cout << "Playing Action Card: " << instruction << std::endl;
+    std::cout << "PLAYING ACTION CARD: " << instruction << std::endl;
 
     if(instruction == "REVERSE HAND"){ //ReVER
         hand_.Reverse();
@@ -71,10 +72,12 @@ void Player::play(ActionCard &&card)
                 words += instruction[i];
             }
         }
+        //DRAW CARDS
         if(worder[0] == "DRAW"){ 
             for(int i = 0; i < std::stoi(worder[1]); ++i){
                 drawPointCard();
             }
+            //PLAY CARDS
         } else if(worder[0] == "PLAY"){ 
             for(int i = 0; i < std::stoi(worder[1]); ++i){
                 playPointCard();
