@@ -8,8 +8,6 @@ ActionCard::ActionCard() : Card()
 {
     this->setType(ACTION_CARD);
 }
-
-
         /**
          * @return true if the card is playable, false otherwise
          * For a card to be playable, it has to be drawn and the instruction has to be valid
@@ -21,14 +19,12 @@ ActionCard::ActionCard() : Card()
         */
 bool ActionCard::isPlayable()
 {
-    if (!getDrawn()) return false; //if it hasn't been drawn return false
-
-    std::string swap = "SWAP HAND WITH OPPONENT"; //trying to make sure the instruction is valid
+    if (!getDrawn()) return false; 
+    std::string swap = "SWAP HAND WITH OPPONENT"; 
     std::string reverse = "REVERSE HAND";
     std::regex draw("^DRAW ([1-9][0-9]{0,1}|99) CARD\\(S\\)$");
     std::regex play("^PLAY ([1-9][0-9]{0,1}|99) CARD\\(S\\)$");
-
-    if (getInstruction() == swap) return true; //check for all cases
+    if (getInstruction() == swap) return true;
     if (getInstruction() == reverse) return true;
     if (std::regex_match(getInstruction(), draw)) return true;
     if (std::regex_match(getInstruction(), play)) return true;
@@ -51,11 +47,9 @@ void ActionCard::Print() const
     std::cout << "Type: " << getType() << std::endl;
     std::cout << "Instruction: " << getInstruction() << std::endl;
     std::cout << "Card:" << std::endl;
-
     if (!getImageData()){
          std::cout << "No image data" << std::endl;
-    }
-    else {
+    }else {
         for(int i = 0; i < 80; i++){
             std::cout << getImageData()[i] << " " << std::endl;  
         }   

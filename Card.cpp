@@ -132,8 +132,6 @@ void Card::setImageData(int *data)
     if(bitmap_) delete [] bitmap_;
     bitmap_ = data;
 }
-
-
   /**
          * @return the drawn status of the card
         */

@@ -2,22 +2,16 @@
 /**
          * @post: Construct a new Player object
          */
-Player::Player() :  hand_(), score_(0), opponent_(nullptr),
-                   actiondeck_(nullptr), pointdeck_(nullptr)
-{
-
-}
-
+Player::Player() :  hand_(), score_(0), opponent_(nullptr),actiondeck_(nullptr), pointdeck_(nullptr){}
         /**
          * @post: Destroy the Player object
          */
 Player::~Player()
 {
+    delete opponent_;
     delete actiondeck_;
     delete pointdeck_;
-    delete opponent_;
 }
-
         /**
          * @return the player's hand
          */
@@ -25,7 +19,6 @@ const Hand &Player::getHand() const
 {
     return hand_;
 }
-
 /**
          * @post: Set the player's hand
          * @param const reference to a hand object
@@ -61,30 +54,29 @@ void Player::play(ActionCard &&card)
     std::string instruction = card.getInstruction();
     std::cout << "Playing Action Card: " << instruction << std::endl;
 
-    if(instruction == "REVERSE HAND"){ //Reverse Hand Case 
+    if(instruction == "REVERSE HAND"){ //ReVER
         hand_.Reverse();
-    } else if(instruction == "SWAP HAND WITH OPPONENT"){ //Swap Hand Case 
+    } else if(instruction == "SWAP HAND WITH OPPONENT"){ //Swap 
         Hand temp = getHand();
         setHand(opponent_->getHand());
         opponent_->setHand((temp));
     } else{ 
-        std::vector<std::string> wordsVector; //go through each word of the card 
-        std::string word = "";
+        std::vector<std::string> worder; 
+        std::string words = "";
         for(int i = 0; i < instruction.size(); ++i){
             if(instruction[i] == ' '){
-                wordsVector.push_back(word);
-                word = "";
+                worder.push_back(words);
+                words = "";
             } else{
-                word += instruction[i];
+                words += instruction[i];
             }
         }
-
-        if(wordsVector[0] == "DRAW"){ //Draw X card(s) Case 
-            for(int i = 0; i < std::stoi(wordsVector[1]); ++i){
+        if(worder[0] == "DRAW"){ 
+            for(int i = 0; i < std::stoi(worder[1]); ++i){
                 drawPointCard();
             }
-        } else if(wordsVector[0] == "PLAY"){ //Play X card(s) Case 
-            for(int i = 0; i < std::stoi(wordsVector[1]); ++i){
+        } else if(worder[0] == "PLAY"){ 
+            for(int i = 0; i < std::stoi(worder[1]); ++i){
                 playPointCard();
             }
         }

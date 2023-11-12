@@ -99,14 +99,11 @@ int Hand::PlayCard()
         throw std::exception(); 
     }
     PointCard card = cards_.front(); 
-
     if(!card.isPlayable()){ 
         cards_.pop_front(); 
         throw std::exception();
     }
-
     int ret = std::stoi(card.getInstruction()); 
-
     cards_.pop_front();
     return ret; 
 }
