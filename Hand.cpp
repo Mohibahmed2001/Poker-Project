@@ -93,7 +93,7 @@ void Hand::Reverse()
          * If the card is not playable, the card is removed from the hand
          * @return the points earned from playing the card
          */
-iint Hand::PlayCard()
+int Hand::PlayCard()
 {
     if(isEmpty()){
         throw std::exception(); 
