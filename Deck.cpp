@@ -5,7 +5,7 @@
          * @post: Construct a new Deck object
          */
 template <typename CardType>
-Deck<CardType>::Deck(){
+Deck<CardType>::Deck() : cards_() {
 
 }
         /**
@@ -13,7 +13,7 @@ Deck<CardType>::Deck(){
          */
 template <typename CardType>
 Deck<CardType>::~Deck(){
-
+    cards_.~vector();
 }
  /**
          * @post: Add a Card to the Deck
@@ -21,9 +21,9 @@ Deck<CardType>::~Deck(){
          */
 template <typename CardType>
 void Deck<CardType>::AddCard(const CardType &card)
-{   
-    
+{
     cards_.push_back(card);
+    
 }
 /**
          * @post: Draw a card from the deck
@@ -36,11 +36,15 @@ CardType &&Deck<CardType>::Draw()
     if(!IsEmpty()){
         CardType&& card = std::move(cards_.back());
         cards_.pop_back();
+        
         return std::move(card);
     } else{
         throw std::out_of_range("NO CARDS IN DECK");
     }
+    
+   
 }
+
 
         /**
          * @return if the deck is empty 
@@ -63,15 +67,21 @@ void Deck<CardType>::Shuffle()
          * @return the vector of cards in the deck 
          */
 template <typename CardType>
-int Deck<CardType>::getSize() const
+void Deck<CardType>::Shuffle()
 {
-    return (int) cards_.size();
+    std::mt19937 changer(2028358904); //given seed
+    std::shuffle(cards_.begin(), cards_.end(),changer);
 }
 /**
          * @return the vector of cards in the deck 
          */
 template <typename CardType>
+int Deck<CardType>::getSize() const
+{
+    return (int) cards_.size();
+}
 std::vector<CardType> Deck<CardType>::getDeck() const
 {
     return cards_;
 }
+
