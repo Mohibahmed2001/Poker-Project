@@ -15,8 +15,13 @@ Card::~Card() {
          * @post: Construct a new Card object
          * @param: const reference to a Card object
         */
-Card::Card(const Card& rhs) :cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_) {
-    bitmap_ = new int{*rhs.bitmap_};
+Card::Card(const Card &rhs) : cardType_(rhs.cardType_), instruction_(rhs.instruction_), drawn_(rhs.drawn_)
+{
+    if(rhs.bitmap_ != nullptr){
+        bitmap_ = new int(*rhs.bitmap_);
+    } else{
+        bitmap_ = nullptr;
+    }
 }
 
 /**
@@ -24,41 +29,49 @@ Card::Card(const Card& rhs) :cardType_(rhs.cardType_), instruction_(rhs.instruct
          * @param const reference to a Card object
          * @return this Card object
          */
-Card& Card::operator=(const Card& rhs) {
+Card &Card::operator=(const Card &rhs)
+{
     if (this != &rhs) {
         cardType_ = rhs.cardType_;
         instruction_ = rhs.instruction_;
         drawn_ = rhs.drawn_;
         bitmap_ = rhs.bitmap_;
+
     }
+
     return *this;
+    
 }
 
  /**
          * Move Constructor
          * @param: rvalue reference to a Card object 
         */
-Card::Card(Card&& rhs){
+Card::Card(Card &&rhs){
+
     cardType_ = std::move(rhs.cardType_);
     instruction_ = std::move(rhs.instruction_);
     bitmap_ = rhs.bitmap_;
     rhs.bitmap_ = nullptr;
-    drawn_ = std::move(rhs.drawn_);
+    drawn_ = rhs.drawn_;
+
 }
 /**
          * Move assignment operator
          * @param: rvalue reference to a Card object
          * @return this card object
         */
-Card& Card::operator=(Card&& rhs) {
-    if (this != &rhs) {
-        delete[] bitmap_;
-        std::swap(cardType_,rhs.cardType_);
-        std::swap(instruction_,rhs.instruction_);
-        std::swap(bitmap_,rhs.bitmap_);
-        std::swap(drawn_,rhs.drawn_);
+Card &Card::operator=(Card &&rhs)
+{
+
+    if(this != &rhs){
+        cardType_ = std::move(rhs.cardType_);
+        instruction_ = std::move(rhs.instruction_);
+        drawn_ = rhs.drawn_;
+        bitmap_ = std::move(rhs.bitmap_);
         rhs.bitmap_ = nullptr;
     }
+
     return *this;
 }
 
@@ -66,17 +79,20 @@ Card& Card::operator=(Card&& rhs) {
          * Default Constructor
          * @post: Construct a new Card object 
          */
-Card::Card() : cardType_(ACTION_CARD),instruction_(""),bitmap_(nullptr), drawn_(false) {}
+Card::Card() : cardType_(), instruction_(""), bitmap_(), drawn_(false)
+{
+}
  /**
          * @return the string representation of the card type ACTION_CARD or POINT_CARD
          */
-std::string Card::getType() const {
-    if( cardType_==ACTION_CARD){
-        return "ACTION_CARD";
-    }
-    else{
-        return "POINT_CARD";
-    }
+std::string Card::getType() const
+{
+    std::string triangle;
+    if(cardType_ == POINT_CARD)
+        triangle = "POINT_CARD";
+    else
+        triangle = "ACTION_CARD";
+    return triangle;
 }
 
 /**
@@ -113,10 +129,12 @@ const int* Card::getImageData() const {
          * @post: Set the image data
          * @param pointer to an array of integers
          */
-void Card::setImageData(int* data) {
-    delete[] bitmap_;
+void Card::setImageData(int *data)
+{
+    if(bitmap_) delete [] bitmap_;
     bitmap_ = data;
 }
+
 
   /**
          * @return the drawn status of the card
