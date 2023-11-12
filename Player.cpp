@@ -2,37 +2,51 @@
 /**
          * @post: Construct a new Player object
          */
-Player::Player() : score_(0), opponent_(nullptr), actiondeck_(nullptr), pointdeck_(nullptr) {}
+Player::Player() :  hand_(), score_(0), opponent_(nullptr),
+                   actiondeck_(nullptr), pointdeck_(nullptr)
+{
+
+}
 
         /**
          * @post: Destroy the Player object
          */
-Player::~Player() {}
+Player::~Player()
+{
+    delete actiondeck_;
+    delete pointdeck_;
+    delete opponent_;
+}
 
         /**
          * @return the player's hand
          */
-const Hand& Player::getHand() const {
+const Hand &Player::getHand() const
+{
     return hand_;
 }
+
 /**
          * @post: Set the player's hand
          * @param const reference to a hand object
          */
-void Player::setHand(const Hand& hand) {
+void Player::setHand(const Hand &hand)
+{
     hand_ = hand;
 }
 /**
          * @return the Player's current score
          */
-int Player::getScore() const {
+int Player::getScore() const
+{
     return score_;
 }
 /**
          * @post: Set the player's score
          * @param: score 
          */
-void Player::setScore(const int& score) {
+void Player::setScore(const int &score)
+{
     score_ = score;
 }
 /**
@@ -41,31 +55,67 @@ void Player::setScore(const int& score) {
          * Begin the function by reporting the instruction of the card:
          * PLAYING ACTION CARD: [instruction]
          */
-void Player::play(ActionCard&& card) {
-    std::cout << "PLAYING ACTION CARD: " << card.getInstruction() << std::endl;
-   //still need to do
+void Player::play(ActionCard &&card)
+{
+
+    std::string instruction = card.getInstruction();
+    std::cout << "Playing Action Card: " << instruction << std::endl;
+
+    if(instruction == "REVERSE HAND"){ //Reverse Hand Case 
+        hand_.Reverse();
+    } else if(instruction == "SWAP HAND WITH OPPONENT"){ //Swap Hand Case 
+        Hand temp = getHand();
+        setHand(opponent_->getHand());
+        opponent_->setHand((temp));
+    } else{ 
+        std::vector<std::string> wordsVector; //go through each word of the card 
+        std::string word = "";
+        for(int i = 0; i < instruction.size(); ++i){
+            if(instruction[i] == ' '){
+                wordsVector.push_back(word);
+                word = "";
+            } else{
+                word += instruction[i];
+            }
+        }
+
+        if(wordsVector[0] == "DRAW"){ //Draw X card(s) Case 
+            for(int i = 0; i < std::stoi(wordsVector[1]); ++i){
+                drawPointCard();
+            }
+        } else if(wordsVector[0] == "PLAY"){ //Play X card(s) Case 
+            for(int i = 0; i < std::stoi(wordsVector[1]); ++i){
+                playPointCard();
+            }
+        }
+
+    }
 }
+
   /**
          * @post: Draw a point card and place it in the player's hand
          */
-void Player::drawPointCard() {
-    if (!pointdeck_->IsEmpty()) {
-        hand_.addCard(pointdeck_->Draw());
+void Player::drawPointCard()
+{
+    if(pointdeck_ && !pointdeck_->IsEmpty()){ //if there is a pointdeck and its not empty 
+        hand_.addCard(std::move(pointdeck_->Draw())); //draw 
     }
 }
 /**
          * @post: Play a point card from the player's hand and update the player's score
          */
-void Player::playPointCard() {
-    if (!hand_.isEmpty()) {
-        score_ += hand_.PlayCard();
+void Player::playPointCard()
+{
+    if(!hand_.isEmpty()){
+        setScore(getScore()+hand_.PlayCard()); //set the score to += the card being played 
     }
 }
  /**
          * @post: Set the opponent of the player
          * @param a pointer to a Player opponent 
          */
-void Player::setOpponent(Player* opponent) {
+void Player::setOpponent(Player *opponent)
+{
     opponent_ = opponent;
 }
   /**
