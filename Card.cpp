@@ -1,7 +1,6 @@
 
 #include "Card.hpp"
 using namespace std;
-
 /**
          * Destructor
          * @post: Destroy the Card object
@@ -9,7 +8,6 @@ using namespace std;
 Card::~Card() {
     delete[] bitmap_;
 }
-
 /**
          * Copy Constructor
          * @post: Construct a new Card object

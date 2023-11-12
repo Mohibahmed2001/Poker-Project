@@ -69,8 +69,8 @@ void Deck<CardType>::Shuffle()
 template <typename CardType>
 void Deck<CardType>::Shuffle()
 {
-    std::mt19937 changer(2028358904); //given seed
-    std::shuffle(cards_.begin(), cards_.end(),changer);
+    std::mt19937 mt1(2028358904); //given seed
+    std::shuffle(cards_.begin(), cards_.end(),mt1);
 }
 /**
          * @return the vector of cards in the deck 
@@ -80,6 +80,7 @@ int Deck<CardType>::getSize() const
 {
     return (int) cards_.size();
 }
+template <typename CardType>
 std::vector<CardType> Deck<CardType>::getDeck() const
 {
     return cards_;
