@@ -14,7 +14,7 @@ Hand::Hand() : cards_()
          */
 Hand::~Hand()
 {
-    cards_.clear();
+    cards_.~deque();
 }
 /**
          * Copy Assignment Operator
@@ -69,7 +69,7 @@ const std::deque<PointCard> &Hand::getCards() const
          */
 void Hand::addCard(PointCard &&card)
 {
-    card.setDrawn(true);
+    card.setDrawn(true); 
     cards_.push_back(card);
 }
 
@@ -93,20 +93,20 @@ void Hand::Reverse()
          * If the card is not playable, the card is removed from the hand
          * @return the points earned from playing the card
          */
-int Hand::PlayCard()
+iint Hand::PlayCard()
 {
     if(isEmpty()){
+        throw std::exception(); 
+    }
+    PointCard card = cards_.front(); 
+
+    if(!card.isPlayable()){ 
+        cards_.pop_front(); 
         throw std::exception();
     }
-    PointCard card = cards_.front();
 
-    if(!card.isPlayable()){
-        cards_.pop_front();
-        throw std::exception();
-    }
-
-    int ret = std::stoi(card.getInstruction());
+    int ret = std::stoi(card.getInstruction()); 
 
     cards_.pop_front();
-    return ret;
+    return ret; 
 }
