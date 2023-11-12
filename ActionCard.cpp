@@ -1,12 +1,12 @@
 #include "ActionCard.hpp"
-#include <iostream>
-#include <string>
-#include <cctype>
+#include "Card.hpp"
 #include <regex>
 /**
          * @post: Construct a new Action Card object
         */
-ActionCard::ActionCard() : Card() {
+ActionCard::ActionCard() : Card()
+{
+    this->setType(ACTION_CARD);
 }
 
 
@@ -19,15 +19,21 @@ ActionCard::ActionCard() : Card() {
          * REVERSE HAND : reverse the order of the cards in the hand
          * SWAP HAND WITH OPPONENT : swap the hand with the opponent
         */
-bool ActionCard::isPlayable() {
-  
-    if (!getDrawn()) {
-        return false;
-    }
-    //KEY DRAW X CARD(S) must be checking exactly for tht
-    std::string instruction = getInstruction();
-    std::regex validPattern(R"(^(DRAW \d+ CARD\(S\)|PLAY \d+ CARD\(S\)|REVERSE HAND|SWAP HAND WITH OPPONENT)$)");
-    return std::regex_match(instruction, validPattern);
+bool ActionCard::isPlayable()
+{
+    if (!getDrawn()) return false; //if it hasn't been drawn return false
+
+    std::string swap = "SWAP HAND WITH OPPONENT"; //trying to make sure the instruction is valid
+    std::string reverse = "REVERSE HAND";
+    std::regex draw("^DRAW ([1-9][0-9]{0,1}|99) CARD\\(S\\)$");
+    std::regex play("^PLAY ([1-9][0-9]{0,1}|99) CARD\\(S\\)$");
+
+    if (getInstruction() == swap) return true; //check for all cases
+    if (getInstruction() == reverse) return true;
+    if (std::regex_match(getInstruction(), draw)) return true;
+    if (std::regex_match(getInstruction(), play)) return true;
+
+    return false; //if no case satisfied, return false
 }
 
 /**
@@ -39,19 +45,22 @@ bool ActionCard::isPlayable() {
          * 
          * Note: For [ImageData]: If there is no image data, print "No image data" instead
          */
-void ActionCard::Print() const {
+void ActionCard::Print() const
+{
+
     std::cout << "Type: " << getType() << std::endl;
     std::cout << "Instruction: " << getInstruction() << std::endl;
-    std::cout << "Card: " << std::endl;
-    const int* imageData = getImageData();
-    if (imageData) {
-        for (size_t i = 0; i<80; ++i) {
-            std::cout << imageData[i] << " ";
-        }
-        std::cout << std::endl;
-    } else {
-        std::cout << "No image data" << std::endl;
-    }
-}
+    std::cout << "Card:" << std::endl;
 
+    if (!getImageData()){
+         std::cout << "No image data" << std::endl;
+    }
+    else {
+        for(int i = 0; i < 80; i++){
+            std::cout << getImageData()[i] << " " << std::endl;  
+        }   
+        
+    }
+    std::cout << std::endl;
+}
 
