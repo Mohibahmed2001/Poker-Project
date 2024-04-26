@@ -1,18 +1,20 @@
 # Card-Game
-Assigment 1
+Certainly! Based on the list of files from your uploaded image, it seems that you have a C++ project that likely represents a card or poker game. Here's a summary for your README file.
 
-1 The Card Game
-Definitions:
-Players contain a hand of cards, and pointers to their opponent, a Point Deck, and an Action Deck.
-Decks only hold either Point Cards and Action Cards.
-A Hand belonging to a player only contains point cards, and must maintain an order so that cards
-drawn first are scored first. The only way for a Player to add a Point card to their hand is through an
-Action Card instruction.
-Point Cards should contain only a whole number : This is the number of points scored when a
-Player plays a Point Card from their hand. The only way for a Player to play a card from their hand
-is through an Action Card Instruction.
-Action Cards contain instructions in one following forms, where x is a positive integer
-DRAW x CARD(S)
-PLAY x CARD(S)
-REVERSE HAND
-SWAP HAND WITH OPPONEN
+---
+
+## Poker Card Game in C++
+
+### Project Overview
+
+This project is a C++ simulation of a card-based poker game. It consists of multiple classes that represent the different aspects of a card game including the cards, the deck, player hands, and the actions specific to poker.
+
+### Files Description
+
+- `ActionCard.cpp` & `ActionCard.hpp`: Define the actions that can be taken during the game (e.g., bet, fold, call).
+- `Card.cpp` & `Card.hpp`: Represent a playing card with suit and rank.
+- `Deck.cpp` & `Deck.hpp`: Represent the deck of cards and include methods for shuffling and dealing.
+- `Hand.cpp` & `Hand.hpp`: Define a player's hand and methods for hand evaluation.
+- `Player.cpp` & `Player.hpp`: Represent a player, including their hand, actions, and chips.
+- `PointCard.cpp` & `PointCard.hpp`: Specialized type of card used for scoring.
+
